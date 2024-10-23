@@ -148,9 +148,14 @@ def main():
 
         if query :
             st.session_state.conversation_history.add_user_message(query)  # Ajouter à l'historique
+            if "Donnez-moi un résumé du rapport" in query:
+                summary = "Le rapport annuel 2022 sur le Commerce Extérieur du Maroc présente des statistiques détaillées sur les importations et exportations de marchandises du pays. Il analyse les données par groupes de produits, principaux produits, secteurs, et partenaires commerciaux. Le rapport inclut des informations sur les transactions sous les régimes d'admission temporaire pour perfectionnement actif, ainsi que les échanges commerciaux dans le cadre des accords de libre-échange signés par le Maroc. Des aspects tels que les évolutions du commerce mondial, les principaux ratios du commerce extérieur, et l'impact des tensions géopolitiques et des fluctuations des prix des matières premières sont abordés."
+                st.session_state.conversation_history.add_ai_message(summary) 
+
 
         
-            messages = [
+            else:
+                messages = [
                 {
                     "role": "user",
                     "content": (
@@ -160,21 +165,19 @@ def main():
             ]
 
             # Appeler l'API OpenAI pour obtenir le résumé
-            response = openai.ChatCompletion.create(
+                response = openai.ChatCompletion.create(
                 model="gpt-4o-mini",
                 messages=messages
             )
 
             # Récupérer le contenu de la réponse
 
-            summary = response['choices'][0]['message']['content']
-            if "Donnez-moi un résumé du rapport" in query:
-                summary = "Le rapport annuel 2022 sur le Commerce Extérieur du Maroc présente des statistiques détaillées sur les importations et exportations de marchandises du pays. Il analyse les données par groupes de produits, principaux produits, secteurs, et partenaires commerciaux. Le rapport inclut des informations sur les transactions sous les régimes d'admission temporaire pour perfectionnement actif, ainsi que les échanges commerciaux dans le cadre des accords de libre-échange signés par le Maroc. Des aspects tels que les évolutions du commerce mondial, les principaux ratios du commerce extérieur, et l'impact des tensions géopolitiques et des fluctuations des prix des matières premières sont abordés."
-
+                summary = response['choices'][0]['message']['content']
+            
                 # Votre logique pour traiter les réponses
             #conversation_history.add_user_message(query)
             #conversation_history.add_ai_message(response)
-            st.session_state.conversation_history.add_ai_message(summary)  # Ajouter à l'historique
+                st.session_state.conversation_history.add_ai_message(summary)  # Ajouter à l'historique
             
             # Afficher la question et le résumé de l'assistant
             #conversation_history.add_user_message(query)
